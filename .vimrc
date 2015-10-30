@@ -59,7 +59,7 @@ set softtabstop=2
 set expandtab
 endif 
 " Display tabs and trailing blank visually
-"set list listchars=tab:\ \ ,trail:·
+set list listchars=tab:\ \ 
 " Wrap lines and wrapping at proper position
 set wrap
 set linebreak
@@ -69,7 +69,7 @@ set linebreak
 " @Completion
 """"""""""""""""""""""""""""""
 set wildmode=list:longest
-" Enable Ctrl-n, Ctrl-p to scroll through matches
+" Enable Ctrl-n, Ctrl-p to scroll matches via menu
 set wildmenu
 " Stuff to ignore when tab completing
 set wildignore=*.o,*.obj,*~,*.swp
@@ -93,7 +93,9 @@ set sidescroll=1
 """"""""""""""""""""""""""""""
 " @Search
 """"""""""""""""""""""""""""""
+" Incremental search. Start searching when typing char.
 set incsearch
+" Highlight search
 set hlsearch
 " Ignore Case when searching
 set ignorecase
@@ -111,8 +113,7 @@ set smartcase
 """"""""""""""""""""""""""""""
 " Enable syntax highlighting
 syntax enable
-if 0
-" TODO
+if 0 " XXX
 set t_Co=256
 
 " Use the unix as the standard file type
@@ -133,13 +134,14 @@ if has('persistent_undo') && !isdirectory(expand('~').'/.vim/backups')
   set undodir=~/.vim/backups
   set undofile
 endif
+
 """"""""""""""""""""""""""""""
 " @HOTKEY
 """"""""""""""""""""""""""""""
 " TODO
-" Fast saving
+" Fast saving	\w
 nmap <leader>w :w!<cr>
-" Fast quit
+" Fast quit		\q
 nmap <leader>q :q!<cr>
 " Remap 0 to first non-blank char.
 map 0 ^
@@ -148,3 +150,12 @@ map 0 ^
 if has('mouse')
   set mouse=a
 endif
+
+" Enable highlighting of these keywords in all files. 
+" \W\zs ensures that there is a word break in front of the match
+if has('autocmd')
+  if v:version > 701
+    autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|XXX\|???\|NOTE\|BUG\|HACK\)')
+	autocmd Syntax * call matchadd('Debug', '\W\zs\(INFO\|IDEA\|WARN\)')
+  endif
+endif 
