@@ -7,8 +7,6 @@
 # @Desc		:	
 # 				
 
+cp ~/.vimrc ".vimrc.$(date)"
 cp .vimrc ~/.vimrc
-
-
-
 

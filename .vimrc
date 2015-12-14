@@ -48,18 +48,20 @@ endif
 """"""""""""""""""""""""""""""
 " @Indentation 
 """"""""""""""""""""""""""""""
-set autoindent
-set smartindent
-set cindent
-set smarttab
 set tabstop=4
+set shiftwidth=4
+set expandtab
+set smarttab
+set autoindent
+"set cindent
+"set smartindent
+"set ts=4
 if 0
 set shiftwidth=2
 set softtabstop=2
-set expandtab
 endif 
-" Display tabs and trailing blank visually
-set list listchars=tab:\ \ 
+" TODO Display tabs and trailing blank visually
+" set list listchars=tab:\ \ 
 " Wrap lines and wrapping at proper position
 set wrap
 set linebreak
@@ -139,10 +141,14 @@ endif
 " @HOTKEY
 """"""""""""""""""""""""""""""
 " TODO
-" Fast saving	\w
-nmap <leader>w :w!<cr>
-" Fast quit		\q
+let mapleader =";"
+" Fast saving
+"nmap <leader>w :w!<cr>
+nmap <leader>w :w<cr>
+" Fast quit	
 nmap <leader>q :q!<cr>
+" Fast tabe
+nmap <leader>t :tabe 
 " Remap 0 to first non-blank char.
 map 0 ^
 
@@ -159,3 +165,54 @@ if has('autocmd')
 	autocmd Syntax * call matchadd('Debug', '\W\zs\(INFO\|IDEA\|WARN\)')
   endif
 endif 
+if has("autocmd")
+
+  " Enable file type detection.
+  " Use the default filetype settings, so that mail gets 'tw' set to 72,
+  " 'cindent' is on in C files, etc.
+  " Also load indent files, to automatically do language-dependent indenting.
+  filetype plugin indent on
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  " Also don't do it when the mark is in the first line, that is the default
+  " position when opening a file.
+  autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+  augroup END
+
+else
+
+  set autoindent		" always set autoindenting on
+
+endif " has("autocmd")
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <f9> :Tlist<CR>
+
+let g:acp_completeOption = '.,t,i,b'
+
+" For cscope
+"
+if has("cscope")
+	set csprg=/usr/bin/cscope
+	set csto=1
+	set cst
+	set nocsverb
+	" add any database in current directory
+	if filereadable("cscope.out")
+		cs add cscope.out
+	endif
+	set csverb
+endif
+
