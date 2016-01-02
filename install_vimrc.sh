@@ -9,4 +9,8 @@
 
 cp ~/.vimrc ".vimrc.$(date)"
 cp .vimrc ~/.vimrc
+cp -r plugin/ ~/.vim/
+# acp.vim
+cp -r autoload/ ~/.vim/
+cp -r doc/ ~/.vim/
 
